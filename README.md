@@ -3,7 +3,7 @@
 *Are you ready to showcase your skills and help shape the future of quantum software? This is your chance to join a cutting-edge team building next-generation technology. This screening task will help us get a peek into your creativity and problem-solving abilities!*
 
 Follow the [steps to start a standard Next.js app](https://nextjs.org/docs/app/getting-started/installation#run-the-development-server) to get started.
-**The task is described on the home page. To see the task you have to start the Nextjs app (code in the repo) on local host.**
+**The task is described on the home page of the app. To see the task you have to start the Nextjs app (code in the repo) on local host and open it on the browser.**
 
 **How to submit:**
 1. Fork this repository.
