@@ -2,27 +2,33 @@
 import { useState } from 'react';
 import { size } from '../data/operators';
 
-export default function Operator({ operator, itemId, symbol, height, width, fill, isCustom, components }) {
+export default function Operator({ operator }) {
   const [showEye, setShowEye] = useState(false);
   const [isXRayOpen, setIsXRayOpen] = useState(false);
 
-  const isCustomGate = isCustom;
+  const isCustomGate = operator.id === 'CustomGate';
 
   return (
     <div
       style={{
         position: 'relative',
         width: size,
-        height: height * size,
+        height: operator.height * size,
         border: '1px solid #555',
-        backgroundColor: fill || '#000',
+        backgroundColor: operator.fill || '#000',
         overflow: 'hidden',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 16,
+        color: 'white'
       }}
       onMouseEnter={() => setShowEye(true)}
       onMouseLeave={() => setShowEye(false)}
     >
       {isXRayOpen ? (
         <>
+          {/* X-Ray View */}
           <div
             style={{
               display: 'grid',
@@ -35,7 +41,7 @@ export default function Operator({ operator, itemId, symbol, height, width, fill
               backgroundColor: '#222',
             }}
           >
-            {components.map((comp, index) => (
+            {operator.components?.map((comp, index) => (
               <div
                 key={index}
                 style={{
@@ -71,7 +77,9 @@ export default function Operator({ operator, itemId, symbol, height, width, fill
         </>
       ) : (
         <>
-          {symbol}
+          <svg width={size} height={size * operator.height}>
+            {operator.icon}
+          </svg>
           {isCustomGate && showEye && (
             <button
               style={{
