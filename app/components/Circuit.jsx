@@ -1,16 +1,11 @@
+// ✅ Circuit.jsx
 import ReactGridLayout from 'react-grid-layout';
 import React, { useEffect } from 'react';
 import Operator from './Operator';
 import { margin, operators, size } from '../data/operators';
 
-const circuitContainerPadding = {
-  x: 0,
-  y: 0,
-};
-const containerPadding = {
-  x: 10,
-  y: 10,
-};
+const circuitContainerPadding = { x: 0, y: 0 };
+const containerPadding = { x: 10, y: 10 };
 const circuitLineMarginL = 40;
 const circuitLineMarginR = 50;
 const gridDimenY = 3;
@@ -23,9 +18,7 @@ export default ({ droppingItem }) => {
 
   useEffect(() => {
     if (!droppingItem) return;
-    setDroppingItemHeight(
-      operators.find(op => op.id === droppingItem)?.height ?? 1
-    );
+    setDroppingItemHeight(operators.find(op => op.id === droppingItem)?.height ?? 1);
   }, [droppingItem]);
 
   const handleCircuitChange = (newCircuit) => {
@@ -51,8 +44,7 @@ export default ({ droppingItem }) => {
       isResizable: false,
     };
 
-    const updatedLayout = newLayout
-      .filter(item => item.i !== '__dropping-elem__' && item.y < gridDimenY)
+    const updatedLayout = newLayout.filter(item => item.i !== '__dropping-elem__' && item.y < gridDimenY)
       .map(item => ({
         ...item,
         gateId: layout.find(i => i.i === item.i)?.gateId,
@@ -63,15 +55,15 @@ export default ({ droppingItem }) => {
   };
 
   const handleDragStop = (newLayout) => {
-    if (!draggedItemId) return;
-
-    const updatedLayout = newLayout
-      .filter(item => item.i !== '__dropping-elem__' && item.y < gridDimenY)
+    if (!draggedItemId) {
+      console.error('Dragged item ID is missing on drag stop!');
+      return;
+    }
+    const updatedLayout = newLayout.filter(item => item.i !== '__dropping-elem__' && item.y < gridDimenY)
       .map(item => ({
         ...item,
         gateId: layout.find(i => i.i === item.i)?.gateId,
       }));
-
     setLayout(updatedLayout);
     setDraggedItemId(null);
   };
@@ -92,15 +84,11 @@ export default ({ droppingItem }) => {
         allowOverlap={false}
         layout={layout}
         useCSSTransforms={false}
-        className='relative z-20'
+        className="relative z-20"
         cols={gridDimenX}
         compactType={null}
         containerPadding={[containerPadding.x, containerPadding.y]}
-        droppingItem={{
-          i: '__dropping-elem__',
-          h: droppingItemHeight,
-          w: 1,
-        }}
+        droppingItem={{ i: '__dropping-elem__', h: droppingItemHeight, w: 1 }}
         isBounded={false}
         isDroppable={true}
         margin={[margin.x, margin.y]}
@@ -113,12 +101,13 @@ export default ({ droppingItem }) => {
         }}
         onDragStart={(layout, oldItem) => {
           const draggedItemId = oldItem?.i;
-          if (!draggedItemId) return;
+          if (!draggedItemId) {
+            console.error('Dragged item ID is missing!');
+            return;
+          }
           setDraggedItemId(draggedItemId);
         }}
-        onDragStop={(layout, oldItem, newItem) => {
-          handleDragStop(layout);
-        }}
+        onDragStop={(layout, oldItem, newItem) => handleDragStop(layout)}
         onDrop={onDrop}
         preventCollision={true}
         rowHeight={size}
@@ -131,42 +120,29 @@ export default ({ droppingItem }) => {
         }}
         width={gridDimenX * (size + margin.x)}
       >
-        {layout?.map((item, index) => {
+        {layout?.map((item) => {
           const gate = operators.find(op => op.id === item.gateId);
-          if (!gate) return null;
-
+          if (!gate) {
+            console.warn(`Gate with ID ${item.gateId} not found in operators.`);
+            return null;
+          }
           return (
-            <div
-              className='grid-item relative group'
-              data-grid={item}
-              key={`${item.i}`}
-            >
-              <Operator
-                operator={{
-                  id: gate.id,
-                  title: gate.title,
-                  height: gate.height,
-                  width: gate.width,
-                  fill: gate.fill,
-                  icon: gate.icon,
-                  isCustom: gate.isCustom,
-                  components: gate.components ?? [],
-                }}
-              />
+            <div className="grid-item relative group" data-grid={item} key={`${item.i}`}>
+              <Operator operator={gate} />
             </div>
           );
         })}
       </ReactGridLayout>
 
       <div
-        className='absolute top-0 left-0 z-10'
+        className="absolute top-0 left-0 z-10"
         style={{
           width: `${2 * containerPadding.x + gridDimenX * (size + margin.x) + size / 2}px`,
         }}
       >
-        {[...new Array(gridDimenY)].map((_, index) => (
+        {[...Array(gridDimenY)].map((_, index) => (
           <div
-            className='absolute flex group'
+            className={'absolute flex group'}
             key={index}
             style={{
               height: `${size}px`,
@@ -175,11 +151,11 @@ export default ({ droppingItem }) => {
               paddingLeft: `${circuitLineMarginL}px`,
             }}
           >
-            <div className='absolute top-0 -translate-y-1/2 left-2 font-mono'>
+            <div className="absolute top-0 -translate-y-1/2 left-2 font-mono">
               Q<sub>{index}</sub>
             </div>
             <div
-              className='h-[1px] bg-gray-400 grow'
+              className="h-[1px] bg-gray-400 grow"
               data-line={index}
               data-val={index + 1}
               key={`line-${index}`}
