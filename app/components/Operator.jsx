@@ -9,7 +9,7 @@ export default function Operator({ operator }) {
   const isCustomGate = operator?.id === 'CustomGate';
 
   useEffect(() => {
-    console.log('Rendering Operator:', operator);
+    console.log('Rendering Operator:', operator); // ✅ See if CustomGate appears
   }, [operator]);
 
   return (
@@ -30,7 +30,7 @@ export default function Operator({ operator }) {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
+              gridTemplateColumns: 'repeat(2, 1fr)',
               gridTemplateRows: 'repeat(2, 1fr)',
               gap: '2px',
               width: '100%',
@@ -39,7 +39,7 @@ export default function Operator({ operator }) {
               backgroundColor: '#222',
             }}
           >
-            {operator.components?.map((comp, index) => (
+            {operator.components?.map((_, index) => (
               <div
                 key={index}
                 style={{
@@ -67,7 +67,8 @@ export default function Operator({ operator }) {
               border: 'none',
               borderRadius: '3px',
               cursor: 'pointer',
-              padding: '2px 5px'
+              padding: '2px 5px',
+              zIndex: 10,
             }}
           >
             ❌
@@ -75,11 +76,16 @@ export default function Operator({ operator }) {
         </>
       ) : (
         <>
-          <svg width={size} height={operator.height * size}>
+          <svg width={size} height={size * operator.height}>
             {operator.icon}
           </svg>
+
           {isCustomGate && showEye && (
             <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsXRayOpen(true);
+              }}
               style={{
                 position: 'absolute',
                 top: 4,
@@ -89,11 +95,7 @@ export default function Operator({ operator }) {
                 borderRadius: '50%',
                 padding: '2px 5px',
                 cursor: 'pointer',
-                fontSize: 10,
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsXRayOpen(true);
+                fontSize: 12,
               }}
             >
               👁️
