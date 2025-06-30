@@ -7,6 +7,7 @@ export default function Operator({ operator }) {
   const [isXRayOpen, setIsXRayOpen] = useState(false);
 
   const isCustomGate = operator.id === 'CustomGate';
+  console.log('Rendering Operator:', operator.id, '| isCustom:', isCustomGate, '| Components:', operator.components);
 
   return (
     <div
@@ -14,11 +15,15 @@ export default function Operator({ operator }) {
         position: 'relative',
         width: size,
         height: operator.height * size,
-        border: '1px solid #555',
+        border: '2px solid red', // For visual debug - optional
         backgroundColor: operator.fill || '#000',
         overflow: 'hidden',
+        cursor: 'pointer',
       }}
-      onMouseEnter={() => setShowEye(true)}
+      onMouseEnter={() => {
+        setShowEye(true);
+        console.log('Hovered:', operator.id);
+      }}
       onMouseLeave={() => setShowEye(false)}
     >
       {isXRayOpen ? (
@@ -71,7 +76,17 @@ export default function Operator({ operator }) {
         </>
       ) : (
         <>
-          {operator.icon}
+          <svg height={size * operator.height} width={size} xmlns="http://www.w3.org/2000/svg">
+            <rect
+              fill={operator.fill}
+              height={size * operator.height}
+              rx="4"
+              width={size}
+              x="0"
+              y="0"
+            />
+            {operator.icon}
+          </svg>
           {isCustomGate && showEye && (
             <button
               style={{
