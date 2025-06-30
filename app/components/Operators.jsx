@@ -13,20 +13,18 @@ export default ({ setDroppingItem }) => {
     <div className="flex flex-col p-2">
       <h1 className="font-semibold text-lg">Operators</h1>
       <div className="flex gap-2 flex-row p-2">
-        {
-          operators.map((op, index) => (
-            <div
-              key={index}
-              title={op.title}
-              draggable
-              onDragStart={(e) => onDragStart(e, op.id, op.title === 'Custom Gate')}
-              className="flex flex-col items-center cursor-pointer"
-            >
-              <Operator operator={op} /> {/* ✅ This is the new line */}
-            </div>
-          ))
-        }
+        {operators.map((op, index) => (
+          <div
+            key={index}
+            title={op.title}
+            draggable
+            onDragStart={(e) => onDragStart(e, op.id, op.title === 'Custom Gate')}
+            className="flex flex-col items-center cursor-pointer"
+          >
+            <Operator operator={op} /> {/* ✅ This renders the left panel gate */}
+          </div>
+        ))}
       </div>
     </div>
   );
-}
+};
