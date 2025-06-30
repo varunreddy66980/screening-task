@@ -3,10 +3,14 @@ import { useState } from 'react';
 import { size } from '../data/operators';
 
 export default function Operator({ operator }) {
+  // ✅ Debug logs to check what's being passed
+  console.log('Rendering Operator:', operator);
+
   const [showEye, setShowEye] = useState(false);
   const [isXRayOpen, setIsXRayOpen] = useState(false);
 
   const isCustomGate = operator.id === 'CustomGate';
+  console.log('isCustomGate?', isCustomGate); // ✅ This should log true when rendering CG
 
   return (
     <div
@@ -17,18 +21,13 @@ export default function Operator({ operator }) {
         border: '1px solid #555',
         backgroundColor: operator.fill || '#000',
         overflow: 'hidden',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 16,
-        color: 'white'
       }}
       onMouseEnter={() => setShowEye(true)}
       onMouseLeave={() => setShowEye(false)}
     >
       {isXRayOpen ? (
         <>
-          {/* X-Ray View */}
+          {/* ✅ X-Ray View */}
           <div
             style={{
               display: 'grid',
@@ -58,6 +57,7 @@ export default function Operator({ operator }) {
               </div>
             ))}
           </div>
+          {/* ❌ Close Button */}
           <button
             onClick={() => setIsXRayOpen(false)}
             style={{
@@ -77,9 +77,20 @@ export default function Operator({ operator }) {
         </>
       ) : (
         <>
-          <svg width={size} height={size * operator.height}>
+          {/* ✅ Normal icon view */}
+          <svg height={size} width={size} xmlns="http://www.w3.org/2000/svg">
+            <rect
+              fill={operator.fill}
+              height={size}
+              width={size}
+              rx="4"
+              x="0"
+              y="0"
+            />
             {operator.icon}
           </svg>
+
+          {/* ✅ 👁️ Button only for Custom Gate */}
           {isCustomGate && showEye && (
             <button
               style={{
@@ -106,3 +117,4 @@ export default function Operator({ operator }) {
     </div>
   );
 }
+
