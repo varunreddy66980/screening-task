@@ -35,7 +35,7 @@ export default function Operator({ operator }) {
               backgroundColor: '#222',
             }}
           >
-            {operator.components.map((comp, index) => (
+            {operator.components?.map((comp, index) => (
               <div
                 key={index}
                 style={{
