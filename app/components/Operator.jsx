@@ -2,28 +2,23 @@
 import { useState } from 'react';
 import { size } from '../data/operators';
 
-export default function Operator({ operator }) {
+export default function Operator({ operator, itemId, symbol, height, width, fill, isCustom, components }) {
   const [showEye, setShowEye] = useState(false);
   const [isXRayOpen, setIsXRayOpen] = useState(false);
 
-  const isCustomGate = operator.id === 'CustomGate';
-  console.log('Rendering Operator:', operator.id, '| isCustom:', isCustomGate, '| Components:', operator.components);
+  const isCustomGate = isCustom;
 
   return (
     <div
       style={{
         position: 'relative',
         width: size,
-        height: operator.height * size,
-        border: '2px solid red', // For visual debug - optional
-        backgroundColor: operator.fill || '#000',
+        height: height * size,
+        border: '1px solid #555',
+        backgroundColor: fill || '#000',
         overflow: 'hidden',
-        cursor: 'pointer',
       }}
-      onMouseEnter={() => {
-        setShowEye(true);
-        console.log('Hovered:', operator.id);
-      }}
+      onMouseEnter={() => setShowEye(true)}
       onMouseLeave={() => setShowEye(false)}
     >
       {isXRayOpen ? (
@@ -40,7 +35,7 @@ export default function Operator({ operator }) {
               backgroundColor: '#222',
             }}
           >
-            {operator.components?.map((comp, index) => (
+            {components.map((comp, index) => (
               <div
                 key={index}
                 style={{
@@ -76,17 +71,7 @@ export default function Operator({ operator }) {
         </>
       ) : (
         <>
-          <svg height={size * operator.height} width={size} xmlns="http://www.w3.org/2000/svg">
-            <rect
-              fill={operator.fill}
-              height={size * operator.height}
-              rx="4"
-              width={size}
-              x="0"
-              y="0"
-            />
-            {operator.icon}
-          </svg>
+          {symbol}
           {isCustomGate && showEye && (
             <button
               style={{
