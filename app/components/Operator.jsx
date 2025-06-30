@@ -1,16 +1,16 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { size } from '../data/operators';
 
 export default function Operator({ operator }) {
-  // ✅ Debug logs to check what's being passed
-  console.log('Rendering Operator:', operator);
-
   const [showEye, setShowEye] = useState(false);
   const [isXRayOpen, setIsXRayOpen] = useState(false);
 
-  const isCustomGate = operator.id === 'CustomGate';
-  console.log('isCustomGate?', isCustomGate); // ✅ This should log true when rendering CG
+  const isCustomGate = operator?.id === 'CustomGate';
+
+  useEffect(() => {
+    console.log('Rendering Operator:', operator);
+  }, [operator]);
 
   return (
     <div
@@ -27,11 +27,10 @@ export default function Operator({ operator }) {
     >
       {isXRayOpen ? (
         <>
-          {/* ✅ X-Ray View */}
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
+              gridTemplateColumns: 'repeat(4, 1fr)',
               gridTemplateRows: 'repeat(2, 1fr)',
               gap: '2px',
               width: '100%',
@@ -57,7 +56,6 @@ export default function Operator({ operator }) {
               </div>
             ))}
           </div>
-          {/* ❌ Close Button */}
           <button
             onClick={() => setIsXRayOpen(false)}
             style={{
@@ -77,20 +75,9 @@ export default function Operator({ operator }) {
         </>
       ) : (
         <>
-          {/* ✅ Normal icon view */}
-          <svg height={size} width={size} xmlns="http://www.w3.org/2000/svg">
-            <rect
-              fill={operator.fill}
-              height={size}
-              width={size}
-              rx="4"
-              x="0"
-              y="0"
-            />
+          <svg width={size} height={operator.height * size}>
             {operator.icon}
           </svg>
-
-          {/* ✅ 👁️ Button only for Custom Gate */}
           {isCustomGate && showEye && (
             <button
               style={{
@@ -117,4 +104,3 @@ export default function Operator({ operator }) {
     </div>
   );
 }
-
